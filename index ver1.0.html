@@ -344,16 +344,7 @@
                 const angleStep = (Math.PI * 2) / 5;
                 let bestIdx = 0; let maxZ = -999;
 
-               let range = 0.5; 
-                let start = 0.25; 
-                let tx = (handX - start) / range;
-                
-                if (tx < 0) tx = 0;
-                if (tx > 0.99) tx = 0.99;
-                
-                let currentBestIdx = Math.floor(tx * photoMeshes.length);
-
-                photoMeshes.forEach((mesh, i) => {
+               photoMeshes.forEach((mesh, i) => {
                     mesh.visible = true;
                     const angle = baseAngle + i * angleStep;
                     const x = Math.sin(angle) * CONFIG.photoOrbitRadius;
@@ -363,14 +354,20 @@
                     mesh.position.lerp(new THREE.Vector3(x, y, z), 0.1);
                     mesh.lookAt(camera.position);
 
-                    if (i === currentBestIdx) { 
-                        mesh.scale.lerp(new THREE.Vector3(1.8, 1.8, 1.😎, 0.1);
+                    let sensitiveX = (1 - handX - 0.2) * 1.6; 
+                if (sensitiveX < 0) sensitiveX = 0;
+                if (sensitiveX > 0.99) sensitiveX = 0.99;
+                bestIdx = Math.floor(sensitiveX * 5); 
+                //
+                    
+                    if (z > 5) { 
+                        const distScale = 1.0 + (z / CONFIG.photoOrbitRadius) * 0.8; 
+                        mesh.scale.lerp(new THREE.Vector3(distScale, distScale, distScale), 0.1);
                     } else {
                         mesh.scale.lerp(new THREE.Vector3(0.6, 0.6, 0.6), 0.1);
                     }
                 });
-
-                selectedIndex = currentBestIdx;
+                selectedIndex = bestIdx;
 
             } else if (state === 'PHOTO') {
                 photoMeshes.forEach((mesh, i) => {
