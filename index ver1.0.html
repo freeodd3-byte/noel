@@ -354,7 +354,11 @@
                     mesh.position.lerp(new THREE.Vector3(x, y, z), 0.1);
                     mesh.lookAt(camera.position);
 
-                    if (z > maxZ) { maxZ = z; bestIdx = i; }
+                    let sensitiveX = (1 - handX - 0.2) * 1.6; 
+                if (sensitiveX < 0) sensitiveX = 0;
+                if (sensitiveX > 0.99) sensitiveX = 0.99;
+                bestIdx = Math.floor(sensitiveX * 5); 
+                //
                     
                     if (z > 5) { 
                         const distScale = 1.0 + (z / CONFIG.photoOrbitRadius) * 0.8; 
